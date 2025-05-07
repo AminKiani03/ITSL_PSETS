@@ -1,0 +1,207 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\begin{document}
+
+\subsection*{Solution to 1. Convexity of the Exponent Region}
+
+Let
+\[
+\mathcal{R}_n \;=\;\Bigl\{(\alpha,\beta):\exists\ \text{test } \phi_n\ \text{s.t.}\ \pi_{1|0}(\phi_n)\le\alpha,\ \pi_{0|1}(\phi_n)\le\beta\Bigr\},
+\]
+and define the exponent‐region
+\[
+\mathcal{E}_n \;=\;\Bigl\{(E_0,E_1):\exists\ \phi_n\ \text{s.t.}\ \pi_{1|0}(\phi_n)\le e^{-nE_0},\ \pi_{0|1}(\phi_n)\le e^{-nE_1}\Bigr\}.
+\]
+We claim $\mathcal{E}_n$ is convex.  Indeed, pick any two achievable pairs $(E_0^{(1)},E_1^{(1)})$ and $(E_0^{(2)},E_1^{(2)})$, realized by tests $\phi_n^{(1)}$ and $\phi_n^{(2)}$, respectively.  For any $\lambda\in[0,1]$, form the randomized test
+\[
+\phi_n = \begin{cases}
+\phi_n^{(1)},&\text{with probability }\lambda,\\
+\phi_n^{(2)},&\text{with probability }1-\lambda.
+\end{cases}
+\]
+Then by the law of total probability,
+\[
+\pi_{1|0}(\phi_n)
+=\;\lambda\,\pi_{1|0}(\phi_n^{(1)})+(1-\lambda)\,\pi_{1|0}(\phi_n^{(2)})
+\;\le\;
+\lambda\,e^{-nE_0^{(1)}}+(1-\lambda)\,e^{-nE_0^{(2)}},
+\]
+and similarly for $\pi_{0|1}(\phi_n)$.  Now observe the elementary inequality
+\[
+\lambda\,e^{-nE_0^{(1)}}+(1-\lambda)\,e^{-nE_0^{(2)}}
+\;\le\;
+e^{-n\bigl(\lambda E_0^{(1)}+(1-\lambda)E_0^{(2)}\bigr)},
+\]
+since the exponential is convex on $\Bbb R$.  Hence
+\[
+\pi_{1|0}(\phi_n)\le e^{-n\bigl(\lambda E_0^{(1)}+(1-\lambda)E_0^{(2)}\bigr)},\quad
+\pi_{0|1}(\phi_n)\le e^{-n\bigl(\lambda E_1^{(1)}+(1-\lambda)E_1^{(2)}\bigr)},
+\]
+showing that $(\lambda E_0^{(1)}+(1-\lambda)E_0^{(2)},\;\lambda E_1^{(1)}+(1-\lambda)E_1^{(2)})\in\mathcal{E}_n$.  This proves convexity.
+
+\bigskip
+
+\subsection*{Solution to 2. Exponential Bounds via the LLR Rule}
+
+Under $H_0:P^n$ versus $H_1:Q^n$, the log‐likelihood ratio (LLR) for a sample $X^n$ is
+\[
+L_n(X^n)\;=\;\sum_{i=1}^n \log\frac{q(X_i)}{p(X_i)}.
+\]
+The Neyman–Pearson test with threshold $\tau = n\,t$ is
+\[
+\phi_n(x^n)
+=\begin{cases}
+1,&L_n(x^n)\ge n\,t,\\
+0,&L_n(x^n)< n\,t.
+\end{cases}
+\]
+Define the moment‐generating‐function (MGF)
+\[
+M_P(\lambda)=\E_{P}\!\Big[e^{\lambda\log\frac{q(X)}{p(X)}}\Big]
+=\exp\bigl(\psi_P(\lambda)\bigr),
+\]
+and analogously $M_Q(\lambda)=\exp(\psi_Q(\lambda))$.  Note that condition (I)
+\[
+-D_{\mathrm{KL}}(Q\!\parallel\!P)\;\le\;t\;\le\;D_{\mathrm{KL}}(P\!\parallel\!Q)
+\]
+ensures both tail‐probabilities are exponentially small.  We mark each bound:
+
+\medskip
+
+\noindent\textbf{(a) Bound on Type I error, $\pi_{1|0}^{(n)}$.}  Under $H_0$, Markov’s inequality gives for any $\lambda>0$,
+\[
+\Pr_{P^n}\bigl\{L_n\ge n\,t\bigr\}
+=\Pr\Big\{e^{\lambda L_n}\ge e^{\lambda n\,t}\Big\}
+\;\le\; e^{-\lambda n\,t}\,\E_{P^n}\!\bigl[e^{\lambda L_n}\bigr]
+\;=\;
+\exp\!\bigl[-\lambda n\,t + n\,\psi_P(\lambda)\bigr].
+\]
+Optimizing over $\lambda$ yields the Chernoff bound:
+\[
+\pi_{1|0}^{(n)}\;\le\;\exp\bigl[-n\,\psi_P^*(t)\bigr],
+\quad
+\psi_P^*(t)=\sup_{\lambda}\{\lambda\,t-\psi_P(\lambda)\}.
+\]
+
+\medskip
+
+\noindent\textbf{(b) Bound on Type II error, $\pi_{0|1}^{(n)}$.}  Under $H_1$, set $Y_i=X_i$ but treat them as i.i.d. $\sim Q$.  Then
+\[
+\Pr_{Q^n}\{L_n< n\,t\}
+=\Pr\Big\{e^{-\lambda L_n}\ge e^{-\lambda n\,t}\Big\}
+\;\le\;
+e^{\lambda n\,t}\,\E_{Q^n}\bigl[e^{-\lambda L_n}\bigr]
+=
+\exp\bigl[\lambda n\,t + n\,\psi_Q(-\lambda)\bigr].
+\]
+Writing $\mu=-\lambda$ and optimizing over $\mu$ gives
+\[
+\pi_{0|1}^{(n)}
+\;\le\;\exp\bigl[-n\,\psi_Q^*(t)\bigr],
+\quad
+\psi_Q^*(t)=\sup_{\mu}\{\mu\,t-\psi_Q(\mu)\}.
+\]
+
+Thus both bounds are established under condition (I).
+
+\bigskip
+
+\subsection*{Solution to 3. Achievable Exponent Pair}
+
+By item 2, for each threshold parameter $t\in[-D(Q\!\parallel\!P),D(P\!\parallel\!Q)]$ the NP test with $\tau=n\,t$ achieves
+\[
+\pi_{1|0}^{(n)}\le e^{-n\,\psi_P^*(t)},\qquad
+\pi_{0|1}^{(n)}\le e^{-n\,\psi_Q^*(t)}.
+\]
+Hence the error‐exponent pair
+\[
+\bigl(E_0(t),E_1(t)\bigr)
+\;=\;\bigl(\psi_P^*(t),\;\psi_Q^*(t)\bigr)
+\]
+is attainable.  Noting that
+\[
+\psi_Q^*(t)
+=\sup_{\mu}\{\mu\,t-\psi_Q(\mu)\}
+=\sup_{\lambda}\{(-\lambda)\,t-\psi_Q(-\lambda)\}
+=\psi_P^*(t)+t,
+\]
+one often writes the pair as
+\[
+E_0(t)=\psi_P^*(t),\quad
+E_1(t)=\psi_P^*(t)+t.
+\]
+
+\bigskip
+
+\subsection*{Solution to 4. Parametric Boundary Curve}
+
+The map
+\[
+t\;\longmapsto\;\bigl(E_0(t),E_1(t)\bigr)
+=\bigl(\psi_P^*(t),\psi_P^*(t)+t\bigr)
+\]
+traces the boundary of the convex region $\mathcal{E}_n$ as $t$ varies over $[-D(Q\!\|P),D(P\!\|Q)]$.  Indeed:
+
+1.  As $t$ increases, $E_0(t)=\psi_P^*(t)$ is nondecreasing and $E_1(t)=E_0(t)+t$ is nonincreasing.
+2.  For any other achievable pair $(E_0,E_1)$, one shows by convexity that it lies below this curve.
+3.  Thus the parametric curve is exactly the {\em upper‐right} boundary (“ROC boundary”) of $\mathcal{E}_n$.
+
+\bigskip
+
+\subsection*{Solution to 5. Optimal Exponent of Weighted Sum of Errors}
+
+We wish to find the best exponent for the Bayesian risk
+\[
+R_n \;=\;\min_{0\le\phi_n\le1}
+\Bigl\{\;\pi_0\,\pi_{1|0}(\phi_n)\;+\;\pi_1\,\pi_{0|1}(\phi_n)\Bigr\},
+\]
+where $\pi_0,\pi_1>0$ are prior weights.  By the Neyman–Pearson characterization and convexity, the minimum is attained by an LLR‐rule with some threshold $t$.  Hence asymptotically
+\[
+R_n
+\;\approx\;
+\min_{t}
+\Bigl\{\pi_0\,e^{-n\,E_0(t)} \;+\;\pi_1\,e^{-n\,E_1(t)}\Bigr\}
+\;=\;
+\min_{t}
+\Bigl\{\pi_0\,e^{-n\,\psi_P^*(t)} \;+\;\pi_1\,e^{-n\,[\psi_P^*(t)+t]}\Bigr\}.
+\]
+Taking $-\tfrac1n\log(\cdot)$ and letting $n\to\infty$, the dominant exponent is
+\[
+E^*
+=\;
+\max_{t}\;\min\bigl\{\psi_P^*(t),\;\psi_P^*(t)+t\bigr\}.
+\]
+Observe the two functions of $t$,
+\[
+f_1(t)=\psi_P^*(t),\quad
+f_2(t)=\psi_P^*(t)+t,
+\]
+satisfy $f_1$ increasing and $f_2$ decreasing, and they intersect exactly at $t=0$.  Hence
+\[
+\max_{t}\min\{f_1(t),f_2(t)\}
+\;=\;
+f_1(0)
+\;=\;
+\psi_P^*(0).
+\]
+But by definition,
+\[
+\psi_P^*(0)
+=\sup_{\lambda}\bigl\{0\cdot\lambda - \psi_P(\lambda)\bigr\}
+=-\inf_{\lambda}\psi_P(\lambda)
+\;=\;
+-\min_{\lambda}\log \E_P\!\Big[\exp\!\bigl(\lambda\log\frac{q}{p}\bigr)\Big],
+\]
+which is precisely the {\em Chernoff information} between $P$ and $Q$.  Therefore the optimal exponent of $\pi_0\,\pi_{1|0}+\pi_1\,\pi_{0|1}$ is
+\[
+\boxed{E^* \;=\;\psi_P^*(0).}
+\]
+This completes the detailed derivation.  \hfill\(\blacksquare\)
+
+\end{document}

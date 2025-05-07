@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{enumitem}
+
+\begin{document}
+
+\title{Homework 02: Large Deviations for Log-Likelihood}
+\author{}
+\date{}
+\maketitle
+
+% Note: Problems marked with (*) are graded.
+
+\section*{Problem 1: Large Deviations for Log-Likelihood}
+
+Let $P$ and $Q$ be two probability distributions such that $P \ll Q$.  Let $X_i$ be i.i.d.\ random variables under $P$ and $Y_i$ be i.i.d.\ random variables under $Q$.  Define for each index $i$
+\begin{align*}
+W_i &= \log \frac{p(Y_i)}{q(Y_i)}, \\
+Z_i &= \log \frac{p(X_i)}{q(X_i)}.
+\end{align*}
+
+The purpose of this problem is to prove:
+
+\emph{Proposition I.} For any $t \ge 0$ and any $n \in \mathbb{N}$, the following large-deviation bound holds:
+\[
+\mathbb{P}\Bigl[\sum_{i=1}^n (W_i - Z_i) \ge nt\Bigr]
+\le \exp\bigl(-n\bigl(\alpha + \tfrac{t}{2}\bigr)\bigr),
+\]
+where
+\[
+\mathcal{B}(P,Q) = \mathbb{E}_{Y \sim Q}\Bigl[\sqrt{\tfrac{p(Y)}{q(Y)}}\Bigr],
+\quad
+\alpha = -2 \log \mathcal{B}(P,Q).
+\]
+
+\begin{enumerate}[label=\arabic*.]
+\item (Chernoff bound) Show that for all $t \ge 0$,
+\[
+\mathbb{P}\Bigl[\sum_{i=1}^n(W_i - Z_i) \ge nt\Bigr]
+\le \exp\bigl(-n \cdot F(t)\bigr),
+\]
+where
+\begin{align*}
+\psi_Q(\lambda) &= \log \mathbb{E}[e^{\lambda W_i}],  \\
+\psi_P(\lambda) &= \log \mathbb{E}[e^{\lambda Z_i}],  \\
+F(t) &= \sup_{\lambda \ge 0} \{\lambda t - \psi_P(-\lambda) - \psi_Q(\lambda)\}.
+\end{align*}
+
+\item (Value at zero) Show that
+\[
+F(0) = -\psi_P\bigl(-\tfrac{1}{2}\bigr) - \psi_Q\bigl(\tfrac{1}{2}\bigr)
+= \alpha.
+\]
+
+\item (Linear lower bound) Prove that for all $t \ge 0$,
+\[
+F(t) \ge F(0) + \tfrac{t}{2},
+\]
+and conclude Proposition I.
+\end{enumerate}
+
+\section*{Solution}
+
+\subsection*{1. Chernoff Bound}
+Let
+\[
+S_n = \sum_{i=1}^n (W_i - Z_i).
+\]
+For any $\lambda \ge 0$, by Markov's inequality,
+\[
+\mathbb{P}[S_n \ge nt] 
+= \mathbb{P}\bigl[e^{\lambda S_n} \ge e^{\lambda n t}\bigr]
+\le e^{-\lambda n t} \mathbb{E}[e^{\lambda S_n}]
+= e^{-\lambda n t} \bigl(\mathbb{E}[e^{\lambda W_1}]\bigr)^n \bigl(\mathbb{E}[e^{-\lambda Z_1}]\bigr)^n.
+\]
+Define
+\[
+\psi_Q(\lambda) = \log \mathbb{E}[e^{\lambda W_1}],
+\quad
+\psi_P(-\lambda) = \log \mathbb{E}[e^{-\lambda Z_1}].
+\]
+Then
+\[
+\mathbb{P}[S_n \ge nt] \le \exp\bigl(-n(\lambda t - \psi_P(-\lambda) - \psi_Q(\lambda))\bigr).
+\]
+Optimizing over $\lambda \ge 0$ yields
+\[
+\mathbb{P}[S_n \ge nt] \le \exp(-n F(t)),
+\quad
+F(t) = \sup_{\lambda \ge 0} \{\lambda t - \psi_P(-\lambda) - \psi_Q(\lambda)\}.
+\]
+
+\subsection*{2. Value at Zero}
+We have
+\[
+F(0) = \sup_{\lambda \ge 0} \{ -\psi_P(-\lambda) - \psi_Q(\lambda) \}.
+\]
+Observe:
+\begin{align*}
+\psi_P(-\lambda) &= \log \mathbb{E}_P\bigl[\bigl(\tfrac{p(X)}{q(X)}\bigr)^{-\lambda}\bigr]
+= \log \int p(x)^{1-\lambda} q(x)^\lambda \,dx \\
+\psi_Q(\lambda) &= \log \mathbb{E}_Q\bigl[\tfrac{p(Y)}{q(Y)}^\lambda\bigr]
+= \log \int p(y)^\lambda q(y)^{1-\lambda}\,dy.
+\end{align*}
+Now by cauchy-schwartz (or Hölder with p=q) we have:
+\[
+    \left(\int p(x)^{1-\lambda} q(x)^\lambda \,dx\right)\left(\int p(y)^\lambda q(y)^{1-\lambda}\,dy\right) \geq \left(\int \sqrt(pq)\right)^2 = B^2(P,Q)
+\]
+Thus by monoticity of log we have:
+\[
+F(0) = -\log \left[\left(\int p(x)^{1-\lambda} q(x)^\lambda \,dx\right)\left(\int p(y)^\lambda q(y)^{1-\lambda}\,dy\right) \right] \leq -\log B^2(P,Q) = -2 \log B(P,Q) = \alpha
+\]
+Moreover, if we set $\lambda = \tfrac12$, we have $F(0) = -2\log B^2(P,Q)= \alpha$, so we have equality condition at $\lambda = \tfrac12$, and the proof is complete.
+\subsection*{3. Linear Lower Bound}
+Using the candidate $\lambda = \tfrac12$ in the definition of $F(t)$,
+\[
+F(t) \ge \tfrac12 t - \psi_P(-\tfrac12) - \psi_Q(\tfrac12) = F(0) + \tfrac t2.
+\]
+Therefore,
+\[
+\mathbb{P}[S_n \ge nt] \le \exp(-n F(t)) \le \exp\bigl(-n(\alpha + \tfrac t2)\bigr),
+\]
+as claimed.
+
+\qed
+
+\end{document}

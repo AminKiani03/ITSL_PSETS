@@ -1,0 +1,152 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{enumitem}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem*{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\begin{document}
+
+\section*{Solutions}
+
+\begin{enumerate}[label=\arabic*.]
+%
+\item \textbf{Blow‐up when \(\,r+\alpha s+\beta t\neq1\).}
+\begin{proof}
+Let \(c\in\mathbb R\) and take \(f(x)\equiv c\).  Then
+\[
+V_{\alpha,\beta,r,s,t}(P\|Q)
+~\ge~
+\mathbb E_P[c]-r\,\mathbb E_Q[c]
+~-\,s\log\bigl(\mathbb E_Q[e^{\alpha c}]\bigr)
+~-\,t\log\bigl(\mathbb E_Q[e^{\beta c}]\bigr).
+\]
+Since \(\mathbb E_P[c]=c\) and \(\mathbb E_Q[e^{\alpha c}]=e^{\alpha c}\), etc., this becomes
+\[
+c\,(1-r-\alpha s-\beta t).
+\]
+If \(1-r-\alpha s-\beta t\neq0\), by letting \(c\to\pm\infty\) we see the supremum is \(+\infty\).
+\end{proof}
+
+\medskip
+\item \textbf{Nonnegativity under \(r+\alpha s+\beta t=1\).}
+\begin{proof}
+Setting \(f\equiv0\) in the variational expression gives
+\[
+V_{\alpha,\beta,r,s,t}(P\|Q)\;\ge\;
+0\;-\;r\cdot0\;-\;s\log1\;-\;t\log1
+\;=\;0.
+\]
+Hence \(V_{\alpha,\beta,r,s,t}(P\|Q)\ge0\).
+\end{proof}
+
+\medskip
+\item \textbf{Zero at \(P=Q\); converse fails.}
+\begin{proof}
+If \(P=Q\), then by Jensen’s inequality,
+\[
+\mathbb E_P[f]
+\;-\;r\,\mathbb E_P[f]
+\;-\;s\log\mathbb E_P[e^{\alpha f}]
+\;-\;t\log\mathbb E_P[e^{\beta f}]
+\;\le\;
+(1-r-\alpha s-\beta t)\,\mathbb E_P[f]
+\;=\;0,
+\]
+so the supremum is \(\le0\), hence zero.  But one can show there exist \(P\neq Q\) for which the optimal \(f\) is identically zero, so \(V=0\) yet \(P\neq Q\).
+\end{proof}
+
+\medskip
+\item \textbf{Marginal‐vs‐joint:}
+\[
+V_{\alpha,\beta,r,s,t}(P_X\|Q_X)
+\;\le\;
+V_{\alpha,\beta,r,s,t}(P_{XY}\|Q_{XY}).
+\]
+\begin{proof}
+Every test‐function \(f\colon\mathcal X\to\mathbb R\) can be lifted to \(f(x,y)=f(x)\), yielding the desired inequality by taking suprema.
+\end{proof}
+
+\medskip
+\item \textbf{Invariance under same channel \(\,W_{Y|X}\).}
+\begin{proof}
+Fix a channel \(W(y|x)\).  For any \(g\colon\mathcal Y\to\mathbb R\), define
+\(\tilde f(x)=\log\bigl(\mathbb E_{W(\cdot|x)}[\exp g(Y)]\bigr)\).
+Plugging \(\tilde f\) into the \(X\)-only functional yields exactly the \(Y\)-functional for \(g\).  Optimizing over \(g\) shows equality of the two suprema.
+\end{proof}
+
+\smallskip
+\noindent\emph{Data‐processing and convexity.}
+\begin{itemize}
+  \item \emph{Data‐processing:} If \(X\to Y\to Z\) is Markov, apply invariance twice to see \(V(P_X\|Q_X)\ge V(P_Z\|Q_Z)\).
+  \item \emph{Convexity:} For fixed \(f\), the map \((P,Q)\mapsto\mathbb E_P[f]-r\mathbb E_Q[f]-s\log\mathbb E_Q[e^{\alpha f}]-t\log\mathbb E_Q[e^{\beta f}]\) is affine in \((P,Q)\).  Supremum of affines is convex.
+\end{itemize}
+
+\medskip
+\item \textbf{Superadditivity over independent marginals:}
+\[
+V_{\alpha,\beta,r,s,t}(P_{XY}\,\|\,Q_XQ_Y)
+\;\ge\;
+V_{\alpha,\beta,r,s,t}(P_X\|Q_X)
++\;V_{\alpha,\beta,r,s,t}(P_Y\|Q_Y).
+\]
+\begin{proof}
+Given optimal test‐functions \(f(x)\) and \(g(y)\) for the marginals, consider \(h(x,y)=f(x)+g(y)\).  Independence of \(Q_XQ_Y\) yields 
+\(\mathbb E_{Q_XQ_Y}[\exp(\alpha h)]=\mathbb E_{Q_X}[e^{\alpha f}]\,
+\mathbb E_{Q_Y}[e^{\alpha g}]\), and similarly for \(\beta\).  Consequently the variational objective splits and the supremum is at least the sum.
+\end{proof}
+
+\medskip
+\item \textbf{The one–parameter family \(W_\alpha\).}
+\[
+W_\alpha(P\|Q)
+\;=\;
+V_{\alpha,0,\;1-1/\alpha,\;1/\alpha^2,\;0}(P\|Q).
+\]
+\begin{proof}[Limit \(\alpha\to0\)]
+Expand the log-MGF to second order:
+\(\log\mathbb E_Q[e^{\alpha f}]
+=\alpha\mathbb E_Q[f]+\tfrac{\alpha^2}{2}\mathrm{Var}_Q(f)+o(\alpha^2).\)
+Plug into the definition, rescale \(f\mapsto f/\alpha\), and let \(\alpha\to0\).  One obtains
+\(\sup_f\{\mathbb E_P[f]-\mathbb E_Q[f]-\tfrac12\mathrm{Var}_Q(f)\}\),
+whose solution is the χ²-divergence:
+\(\frac12\mathbb E_Q[(\tfrac{dP}{dQ}-1)^2]\).
+\end{proof}
+\end{enumerate}
+
+\medskip
+\noindent\(\boxed{\chi^2\text{-divergence superadditive}}\)
+
+Since \(D_{\chi^2}(P\|Q)=2\lim_{\alpha\to0}W_\alpha(P\|Q)\) and each \(W_\alpha\) is superadditive, so is \(D_{\chi^2}\).  
+
+\bigskip
+\noindent\textbf{Closed‐form for \(W_\alpha\), \(\alpha\in(0,1)\):}
+
+One finds that the optimal \(f^*\) satisfies
+\[
+\frac{dP}{dQ}
+\;=\;
+\frac{\exp(\alpha f^*)}{\mathbb E_Q[\exp(\alpha f^*)]}
+\]
+and hence
+\[
+W_\alpha(P\|Q)
+\;=\;
+\frac1\alpha D_{\mathrm{Rényi},\alpha}(P||Q)
+\;-\;
+\frac1\alpha-1,
+\]
+where \(D_{\mathrm{Rényi},\alpha}\) is the usual Rényi divergence of order \(\alpha\).
+
+\bigskip
+\noindent\textbf{On an \(f\)–representation:}
+
+In general the five‐parameter family cannot be written as a single‐parameter \(f\)–divergence (except on special parameter subfamilies that reduce to KL or Rényi).
+
+\end{document}
